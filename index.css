@@ -1,0 +1,40 @@
+@import url("sefrep.css");
+
+.grid-cards {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.card {
+    padding: 18px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.card-head h2 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.card-head p {
+    margin: 6px 0 0;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 980px) {
+    .grid-cards {
+        grid-template-columns: 1fr;
+    }
+}

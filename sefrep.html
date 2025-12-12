@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro – SEFREP</title>
+    <link rel="stylesheet" href="sefrep.css?v=3" />
+    <script src="sefrep.js" defer></script>
+</head>
+
+<body>
+    <div class="page">
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1>Cadastro – SEFREP</h1>
+                <p class="subtitle">Registro por tema (VTC, CTC, Licença Premio, Contagem de Tempo).</p>
+            </div>
+
+            <div class="topbar-right">
+                <span class="pill" id="pillTema">Tema: <strong>VTC</strong></span>
+
+                <button class="btn ghost" id="btnIrIndex" type="button">Menu</button>
+                <button class="btn ghost" id="btnIrSeape" type="button">SEAPE</button>
+            </div>
+        </header>
+
+        <main class="content">
+            <aside class="sidebar">
+                <div class="sidebar-title">Temas</div>
+
+                <button class="nav-item active" data-tema="VTC" type="button">
+                    <span class="dot"></span> VTC
+                </button>
+
+                <button class="nav-item" data-tema="CTC" type="button">
+                    <span class="dot"></span> CTC
+                </button>
+
+                <button class="nav-item" data-tema="LICENCA_PREMIUM" type="button">
+                    <span class="dot"></span> Licença Premio
+                </button>
+
+                <button class="nav-item" data-tema="CONTAGEM_TEMPO" type="button">
+                    <span class="dot"></span> Contagem de Tempo
+                </button>
+            </aside>
+
+            <section class="panel">
+                <div class="panel-head">
+                    <h2 id="tituloForm">VTC</h2>
+                    <p id="descForm" class="panel-subtitle">Preencha os campos e clique em “Salvar registro”.</p>
+                </div>
+
+                <form id="formSefrep" class="form">
+                    <div id="formArea"></div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary">Salvar registro</button>
+                        <button type="button" class="btn" id="btnCancelar">Cancelar</button>
+                    </div>
+
+                    <div class="msg" id="msg"></div>
+                </form>
+
+                <hr class="divider" />
+
+                <div class="table-head" id="lista">
+                    <h3>Registros</h3>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="table" id="tblRegistros">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tema</th>
+                                <th>Nome</th>
+                                <th>Escola</th>
+                                <th>Status</th>
+                                <th>Protocolo/Processo</th>
+                                <th>Entrada</th>
+                                <th>Saída</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyRegistros"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>SEFREP • Cadastro</span>
+        </footer>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro – SEPES</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="index.js" defer></script>
+</head>
+
+<body>
+    <div class="page">
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1>Cadastro – SEPES</h1>
+                <p class="subtitle">Escolha qual área você quer cadastrar.</p>
+            </div>
+
+            <div class="topbar-right">
+                <span class="pill">Pasta: <strong>sepes</strong></span>
+            </div>
+        </header>
+
+        <main class="grid-cards">
+            <section class="card">
+                <div class="card-head">
+                    <h2>SEFREP</h2>
+                    <p class="muted">VTC • CTC • Licença Premium • Contagem de Tempo</p>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn primary" data-go="sefrep.html">Abrir cadastro</button>
+                    <button class="btn" data-go="sefrep.html#lista">Ver registros</button>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-head">
+                    <h2>SEAPE</h2>
+                    <p class="muted">Evolução funcional • Aposentadoria • FAI &amp; PUCT</p>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn primary" data-go="seape.html">Abrir cadastro</button>
+                    <button class="btn" data-go="seape.html#lista">Ver registros</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>SEPES • Menu inicial</span>
+            <span class="muted">Front pronto pra integrar ao Supabase depois</span>
+        </footer>
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</html>

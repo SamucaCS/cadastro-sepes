@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro – SEAPE</title>
+    <link rel="stylesheet" href="seape.css" />
+    <script src="seape.js" defer></script>
+</head>
+
+<body>
+    <div class="page">
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1>Cadastro – SEAPE</h1>
+                <p class="subtitle">Evolução funcional, Aposentadoria, FAI &amp; PUCT.</p>
+            </div>
+
+            <div class="topbar-right">
+                <span class="pill" id="pillTema">Tema: <strong>Evolução funcional</strong></span>
+
+                <button class="btn ghost" id="btnIrIndex">Menu</button>
+                <button class="btn ghost" id="btnIrSefrep">SEFREP</button>
+            </div>
+
+        </header>
+
+        <main class="content">
+            <aside class="sidebar">
+                <div class="sidebar-title">Temas</div>
+
+                <button class="nav-item active" data-tema="EVOLUCAO_FUNCIONAL">
+                    <span class="dot"></span> Evolução funcional
+                </button>
+                <button class="nav-item" data-tema="APOSENTADORIA">
+                    <span class="dot"></span> Aposentadoria
+                </button>
+                <button class="nav-item" data-tema="FAI_PUCT">
+                    <span class="dot"></span> FAI &amp; PUCT
+                </button>
+
+                <div class="sidebar-foot">
+                    <p class="hint">(Por enquanto) teste local no navegador.</p>
+                </div>
+            </aside>
+
+            <section class="panel">
+                <div class="panel-head">
+                    <h2 id="tituloForm">Evolução funcional</h2>
+                    <p class="panel-subtitle" id="descForm">Preencha e salve o registro.</p>
+                </div>
+
+                <form id="formSeape" class="form">
+                    <div id="formArea"></div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary">Salvar registro</button>
+                        <button type="button" class="btn" id="btnCancelar">Cancelar</button>
+                    </div>
+
+                    <div class="msg" id="msg"></div>
+                </form>
+
+                <hr class="divider" />
+
+                <div class="table-head">
+                    <h3>Registros</h3>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="table" id="tblRegistros">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tema</th>
+                                <th>Nome</th>
+                                <th>Escola</th>
+                                <th>Status</th>
+                                <th>Protocolo/Processo</th>
+                                <th>Entrada</th>
+                                <th>Saída</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyRegistros"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>SEAPE • Cadastro</span>
+        </footer>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</html>
