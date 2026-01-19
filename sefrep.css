@@ -433,6 +433,48 @@ textarea:focus {
     min-width: 130px;
 }
 
+/* Estilo base dos badges */
+.badge-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: bold;
+}
+
+/* Cores específicas */
+.andamento {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.concluido {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.naoconcluido {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.analise {
+    background-color: #e2e3e5;
+    color: #383d41;
+}
+
+/* Cinza */
+.devolvido {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+/* Amarelo */
+.publicado {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+
 
 @media (max-width: 820px) {
     .content {
