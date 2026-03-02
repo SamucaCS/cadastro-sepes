@@ -1,4 +1,4 @@
-/* SEAPE – Supabase (CRUD) + Editar + cores status */
+/* SEAPE – Supabase (CRUD) + Editar + cores status + Filtros */
 
 const SUPABASE_URL = "https://ffprsdeicjjttfedzbif.supabase.co";
 const SUPABASE_ANON_KEY =
@@ -85,6 +85,15 @@ let temaAtual = null;
 let editingId = null;
 let registros = [];
 
+// ── Estado dos filtros ────────────────────────────────────
+const filtros = {
+    nome: "",
+    tema: "",
+    status: "",
+    escola: "",
+    protocolo: "",
+};
+
 document.addEventListener("DOMContentLoaded", () => {
     const btnIrIndex = document.getElementById("btnIrIndex");
     const btnIrSefrep = document.getElementById("btnIrSefrep");
@@ -96,7 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll(".nav-item").forEach((b) => b.classList.remove("active"));
             btn.classList.add("active");
             temaAtual = btn.dataset.tema;
-
             cancelEdit(true);
             renderForm();
         });
@@ -112,9 +120,78 @@ document.addEventListener("DOMContentLoaded", () => {
     $("#btnApagarTudo")?.addEventListener("click", apagarTudoSupabase);
     $("#btnExportar")?.addEventListener("click", exportarJSON);
 
+    // ── Listeners dos filtros ─────────────────────────────
+    $("#filtroNome")?.addEventListener("input", (e) => {
+        filtros.nome = e.target.value;
+        renderTable();
+    });
+
+    $("#filtroTema")?.addEventListener("change", (e) => {
+        filtros.tema = e.target.value;
+        renderTable();
+    });
+
+    $("#filtroStatus")?.addEventListener("change", (e) => {
+        filtros.status = e.target.value;
+        renderTable();
+    });
+
+    $("#filtroEscola")?.addEventListener("input", (e) => {
+        filtros.escola = e.target.value;
+        renderTable();
+    });
+
+    $("#filtroProtocolo")?.addEventListener("input", (e) => {
+        filtros.protocolo = e.target.value;
+        renderTable();
+    });
+
+    $("#btnLimparFiltros")?.addEventListener("click", limparFiltros);
+
     initTemaAtivo();
     loadAndRender();
 });
+
+function limparFiltros() {
+    filtros.nome = "";
+    filtros.tema = "";
+    filtros.status = "";
+    filtros.escola = "";
+    filtros.protocolo = "";
+
+    const ids = ["filtroNome", "filtroTema", "filtroStatus", "filtroEscola", "filtroProtocolo"];
+    ids.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+    });
+
+    renderTable();
+}
+
+function aplicarFiltros(lista) {
+    let resultado = lista;
+
+    const nome = filtros.nome.trim().toLowerCase();
+    const tema = filtros.tema.trim();
+    const status = filtros.status.trim().toLowerCase();
+    const escola = filtros.escola.trim().toLowerCase();
+    const protocolo = filtros.protocolo.trim().toLowerCase();
+
+    if (nome) resultado = resultado.filter((r) => (r.nome || "").toLowerCase().includes(nome));
+    if (tema) resultado = resultado.filter((r) => (r.tema_key || "") === tema);
+    if (status) resultado = resultado.filter((r) => (r.status || "").toLowerCase().includes(status));
+    if (escola) resultado = resultado.filter((r) => (r.escola || "").toLowerCase().includes(escola));
+    if (protocolo) resultado = resultado.filter((r) =>
+        (r.protocolo || "").toLowerCase().includes(protocolo) ||
+        (r.processo || "").toLowerCase().includes(protocolo)
+    );
+
+    return resultado;
+}
+
+function filtrosAtivos() {
+    return Object.values(filtros).some((v) => v.trim() !== "");
+}
 
 function initTemaAtivo() {
     const active =
@@ -233,7 +310,6 @@ async function onSubmit(ev) {
         data_saida: data.data_saida || null,
     };
 
-    // aposentadoria não tem datas
     if (temaAtual === "APOSENTADORIA") {
         payload.data_entrada = null;
         payload.data_saida = null;
@@ -309,15 +385,33 @@ function renderTable() {
 
     tbody.innerHTML = "";
 
-    if (!registros.length) {
-        tbody.innerHTML = `
-      <tr>
-        <td colspan="9" class="muted">Nenhum registro salvo ainda.</td>
-      </tr>`;
+    // Aplica filtros
+    const lista = aplicarFiltros(registros);
+
+    // Atualiza info dos filtros
+    const infoEl = document.getElementById("filtrosInfo");
+    if (infoEl) {
+        if (filtrosAtivos()) {
+            infoEl.innerHTML = `<span class="filtros-ativos">⚡ ${lista.length}</span> de ${registros.length} registro(s) com os filtros aplicados`;
+        } else {
+            infoEl.textContent = `${registros.length} registro(s) no total`;
+        }
+    }
+
+    if (!lista.length) {
+        const msg = filtrosAtivos()
+            ? "Nenhum registro encontrado com os filtros aplicados."
+            : "Nenhum registro salvo ainda.";
+        tbody.innerHTML = `<tr><td colspan="9" class="muted">${msg}</td></tr>`;
         return;
     }
 
-    registros.forEach((r) => {
+    // Termos para highlight
+    const termoNome = filtros.nome.trim().toLowerCase();
+    const termoEscola = filtros.escola.trim().toLowerCase();
+    const termoProtocolo = filtros.protocolo.trim().toLowerCase();
+
+    lista.forEach((r) => {
         const st = (r.status || "").toLowerCase();
         const badge = r.status
             ? `<span class="badge-status ${statusClass(st)}">${escapeHtml(r.status)}</span>`
@@ -326,19 +420,24 @@ function renderTable() {
         const proc = r.protocolo ? r.protocolo : (r.processo ? r.processo : "—");
         const escola = r.escola ? r.escola : "—";
 
+        // Highlights
+        const nomeHtml = highlight(r.nome || "—", termoNome);
+        const escolaHtml = highlight(escola, termoEscola);
+        const procHtml = highlight(proc, termoProtocolo);
+
         const tr = document.createElement("tr");
         tr.innerHTML = `
       <td>${fmtDateTime(r.created_at || r.updated_at)}</td>
       <td>${escapeHtml(r.tema || r.tema_key || "—")}</td>
-      <td>${escapeHtml(r.nome || "—")}</td>
-      <td>${escapeHtml(escola)}</td>
+      <td>${nomeHtml}</td>
+      <td>${escolaHtml}</td>
       <td>${badge}</td>
-      <td>${escapeHtml(proc)}</td>
+      <td>${procHtml}</td>
       <td>${r.data_entrada ? fmtDate(r.data_entrada) : "—"}</td>
       <td>${r.data_saida ? fmtDate(r.data_saida) : "—"}</td>
       <td>
-        <button class="btn ghost" data-edit="${r.id}" type="button">Editar</button>
-        <button class="btn danger" data-del="${r.id}" type="button">Excluir</button>
+        <button class="btn ghost btn-sm" data-edit="${r.id}" type="button">Editar</button>
+        <button class="btn danger btn-sm" data-del="${r.id}" type="button">Excluir</button>
       </td>
     `;
 
@@ -347,6 +446,14 @@ function renderTable() {
 
         tbody.appendChild(tr);
     });
+}
+
+// Destaca o termo dentro do texto
+function highlight(text, termo) {
+    const safe = escapeHtml(text);
+    if (!termo) return safe;
+    const regex = new RegExp(`(${escapeRegex(escapeHtml(termo))})`, "gi");
+    return safe.replace(regex, `<mark>$1</mark>`);
 }
 
 async function deleteById(id) {
@@ -542,6 +649,11 @@ function escapeHtml(str) {
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
 }
+
 function escapeAttr(str) {
     return escapeHtml(str).replaceAll('"', "&quot;");
+}
+
+function escapeRegex(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

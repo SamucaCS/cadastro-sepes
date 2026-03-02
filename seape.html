@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cadastro – SEAPE</title>
     <link rel="stylesheet" href="seape.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="seape.js" defer></script>
 </head>
 
@@ -19,11 +20,9 @@
 
             <div class="topbar-right">
                 <span class="pill" id="pillTema">Tema: <strong>Evolução funcional</strong></span>
-
                 <button class="btn ghost" id="btnIrIndex">Menu</button>
                 <button class="btn ghost" id="btnIrSefrep">SEFREP</button>
             </div>
-
         </header>
 
         <main class="content">
@@ -57,6 +56,7 @@
                     <div class="form-actions">
                         <button type="submit" class="btn primary">Salvar registro</button>
                         <button type="button" class="btn" id="btnCancelar">Cancelar</button>
+                        <button type="button" class="btn" id="btnLimpar">Limpar</button>
                     </div>
 
                     <div class="msg" id="msg"></div>
@@ -64,8 +64,57 @@
 
                 <hr class="divider" />
 
+                <!-- FILTROS -->
+                <div class="filtros-wrap">
+                    <div class="filtros-grid">
+                        <div class="filtro-field">
+                            <label for="filtroNome">Nome</label>
+                            <input id="filtroNome" type="text" placeholder="Buscar por nome…" autocomplete="off" />
+                        </div>
+                        <div class="filtro-field">
+                            <label for="filtroTema">Tema</label>
+                            <select id="filtroTema">
+                                <option value="">Todos os temas</option>
+                                <option value="EVOLUCAO_FUNCIONAL">Evolução funcional</option>
+                                <option value="APOSENTADORIA">Aposentadoria</option>
+                                <option value="FAI_PUCT">FAI &amp; PUCT</option>
+                            </select>
+                        </div>
+                        <div class="filtro-field">
+                            <label for="filtroStatus">Status</label>
+                            <select id="filtroStatus">
+                                <option value="">Todos os status</option>
+                                <option value="em andamento">Em andamento</option>
+                                <option value="atendendo exigencias">Atendendo exigências</option>
+                                <option value="concluido">Concluído</option>
+                                <option value="não concluido">Não concluído</option>
+                            </select>
+                        </div>
+                        <div class="filtro-field">
+                            <label for="filtroEscola">Escola</label>
+                            <input id="filtroEscola" type="text" placeholder="Buscar por escola…" autocomplete="off" />
+                        </div>
+                        <div class="filtro-field">
+                            <label for="filtroProtocolo">Protocolo / Processo</label>
+                            <input id="filtroProtocolo" type="text" placeholder="Número do protocolo…"
+                                autocomplete="off" />
+                        </div>
+                        <div class="filtro-field filtro-actions">
+                            <button type="button" class="btn ghost btn-sm" id="btnLimparFiltros">✕ Limpar
+                                filtros</button>
+                        </div>
+                    </div>
+                    <div class="filtros-info">
+                        <span id="filtrosInfo" class="muted"></span>
+                    </div>
+                </div>
+
                 <div class="table-head">
                     <h3>Registros</h3>
+                    <div class="table-actions">
+                        <button class="btn ghost btn-sm" id="btnExportar">Exportar JSON</button>
+                        <button class="btn danger btn-sm" id="btnApagarTudo">Apagar tudo</button>
+                    </div>
                 </div>
 
                 <div class="table-wrap">
@@ -94,6 +143,5 @@
         </footer>
     </div>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </html>
